@@ -200,12 +200,14 @@ def get_ilo_object(node):
     :raises: MissingParameterValue if some mandatory information
         is missing on the node
     """
+    
     driver_info = parse_driver_info(node)
-    ilo_object = ilo_client.IloClient(driver_info['ilo_address'],
-                                      driver_info['ilo_username'],
-                                      driver_info['ilo_password'],
-                                      driver_info['client_timeout'],
-                                      driver_info['client_port'])
+    ilo_dict={}
+
+    for ikey in REQUIRED_PROPERTIES.keys() + OPTIONAL_PROPERTIES.keys():
+        ilo_dict[ikey] = driver_info.get(ikey, None)
+    ilo_object = ilo_client.IloClient(**ilo_dict)
+    
     return ilo_object
 
 
